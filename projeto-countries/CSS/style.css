@@ -15,7 +15,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Montserrat", serif;
-    color: var(--primary-text-color);
+    color: var(--primary-text-color) !important;
 }
 
 html, body{
@@ -32,9 +32,7 @@ header{
 h2{
     margin: 20px;
 }
-a:visited{
-    color: black;
-}
+
 
 li, p{
     color: var(--primary-text-color);
@@ -51,6 +49,7 @@ main{
 #main-search-list{
     margin-bottom: 60px;
 
+
 }
 
 #countryDetails{
@@ -62,6 +61,8 @@ main{
     align-items: center;
     justify-content: center;
 }
+
+
 .img-details{
     max-width: 500px;
     margin: 10px;
@@ -103,12 +104,15 @@ form{
     margin: 10px;
 }
 
-.input-search{
-    outline: 0;
-    width: 100%;
-    margin-right: 5px;
-   
+/* Alterando as cores dos feedback e active */
+.valid-feedback{
+    color: var(--secondary-color) !important;
 }
+.invalid-feedback{
+    color: var(--error-color) !important;
+}
+
+
 
 .btn-search{
     padding:  6px;
@@ -130,23 +134,14 @@ form{
 
 .warning {
     display: none;
-    color: var(--error-color);
+    color: var(--error-color) !important;
 }
 
-
-/* estilização de titulo */
-
-.title-h1{
-    color: var(--primary-text-color);
-    text-align: center;
-    margin: 20px 0;
-}
 
 /* Estilização dos cards*/
 
 .card{
     width: 10rem;
-    color: var(--primary-text-color);
     transition: all .3s ease;
 }
 
@@ -157,17 +152,14 @@ form{
     transform: scale(1.1);
 }
 
-.btn{
-    margin:10px ;
-    background-color: var(--primary-color);
-    color: var(--primary-text-color);
-}
+
 
 
 /* estilizando o footer */
 
 .footer{
     margin-top: 20px;
+    padding: 10px;
     position: absolute;
     width: 100%;
     height: 150px;

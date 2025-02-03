@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const containerCards = document.querySelector("#container-cards");
   const mainSearchList = document.querySelector("#main-search-list");
   const countryDetails = document.querySelector("#countryDetails");
-
+  const contactUs = document.querySelector('#contact-us')
   // Variável global para guardar os países
   let countries = [];
 
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnContinent.forEach((button) => {
       button.addEventListener("click", async (e) => {
         e.preventDefault();
-  
+
         const valor = e.target.value;
         const res = await fetch(
           `https://restcountries.com/v3.1/region/${valor}`
@@ -147,7 +147,19 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 2000);
         }
       });
+  
     });
+
+     // função para adicionar a classe active do bootstrap
+     document.getElementById("button-container").addEventListener("click", function(event) {
+  
+      if (event.target.tagName === "BUTTON") {
+          document.querySelectorAll("#button-container .btn-primary").forEach(btn => btn.classList.remove("active"));
+          // Adiciona a classe 'active' ao botão clicado
+          event.target.classList.add("active");
+
+      }
+  });
 
     function loadingCountries() {
       // outra maneira de fazer uma fetch
@@ -170,11 +182,12 @@ document.addEventListener("DOMContentLoaded", () => {
         row.innerHTML = `
             <td>${country.name.common}</td>
             <td>${country.capital}<td>
-            <td>${country.population}</td>
+            <td class="d-none d-sm-table-cell">${country.population}</td>
             <td><img src="${country.flags.svg}" alt="Bandeira de ${country.name.common}" width="40"></td>
             `;
-
         tableCountries.appendChild(row);
+
+
       });
     }
 
@@ -194,6 +207,26 @@ document.addEventListener("DOMContentLoaded", () => {
     loadingCountries();
   } else if (countryDetails) {
     getCountryDetails();
+  } else if (contactUs) {
+   
+    (() => {
+      'use strict'
+    
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+    
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+    
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
   }
 
   function getCountryDetails() {

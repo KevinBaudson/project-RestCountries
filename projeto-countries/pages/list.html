@@ -15,7 +15,7 @@
     <title>Countries</title>
   </head>
   <body>
-    <header>
+    <header >
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand" href="index.html">Search Countries</a>
@@ -46,43 +46,53 @@
         </div>
       </nav>
     </header>
-    <main id="main-search-list">
-      <h1 class="title-h1">
+    <main id="main-search-list" class="container d-flex justify-content-center align-items-center" >
+      <h1 class="title-h1 text-align-center">
         Search the country by name
       </h1>
       <div class="search-countries">
         <form class="d-flex">
-          <input type="text" id="input-search" class="form-control input-search">
-         
-          </div>
+          <input type="text" id="input-search" class="form-control ">
         </form>
-        <p class="error">Por favor, digite um país para a pesquisa!</p>
       </div>
       
-        <div class="btn-group" role="group" aria-label="Basic example">
-    
-          <button value="africa" type="button" class="btn btn-primary continent" >Africa</button>
-          <button value="america" type="button" class="btn btn-primary continent">America</button>
-          <button value="antarctica" type="button" class="btn btn-primary continent">antarctica</button>
-          <button value="asia" type="button" class="btn btn-primary continent">Asia</button>
-          <button value="europe" type="button" class="btn btn-primary continent">Europe</button>
-          <button value="oceania" type="button" class="btn btn-primary continent">Oceania</button>
+        <div class="container">
+          <div id="button-container" class="row">
+            <div class="col-12 col-sm-2">
+              <button value="africa" type="button" class="btn btn-primary w-100 mb-1 rounded-1 continent" >Africa</button>
+            </div>
+            <div class="col-12 col-sm-2">
+              <button value="america" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent active">America</button>
+            </div>
+            <div class="col-12 col-sm-2">
+              <button value="antarctica" type="button" class="btn btn-primary w-100 mb-1 rounded-1 continent">antarctica</button>
+            </div>
+            <div class="col-12 col-sm-2">
+              <button value="asia" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Asia</button>
+            </div>
+            <div class="col-12 col-sm-2">
+              <button value="europe" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Europe</button>
+            </div>
+            <div class="col-12 col-sm-2">
+              <button value="oceania" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Oceania</button>
+            </div>
+          </div>
         </div>
       
      
         <p class="warning">I'm sorry, region not found!</p>
 
     </main>
-    <table id="list" class="table table-hover">
+    <table id="list" class="table table-hover table-responsive">
       <thead>
         <tr>
           <th scope="col">Name</th>
-          <th scope="col" colspan="2" >Capital</th>
-          <th scope="col">Population</th>
+          <th scope="col" colspan="2">Capital</th>
+          <th scope="col" class="d-none d-sm-table-cell">Population</th>
           <th scope="col">Flag</th>
         </tr>
       </thead>
-      <tbody id="table-countries"></tbody>
+      <tbody id="table-countries" class="table-responsive"></tbody>
     </table>
     <!-- footer -->
     <footer class="footer">
