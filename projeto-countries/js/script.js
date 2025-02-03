@@ -216,8 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <div>
           <p><strong>Name: </strong>${name}<p/>
           <p><strong>Population: </strong> ${population} </p>
-          <p><strong>Continent :</strong> ${continent}</p>
-           <p><strong>Borders :</strong> ${borders}</p>
+          <p><strong>Continent:</strong> ${continent}</p>
+           <p><strong>Borders:</strong> ${borders}</p>
         </div>
       </div>
 
