@@ -3,11 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const containerCards = document.querySelector("#container-cards");
   const mainSearchList = document.querySelector("#main-search-list");
   const countryDetails = document.querySelector("#countryDetails");
-  const contactUs = document.querySelector('#contact-us')
+  const contactUs = document.querySelector("#contact-us");
   // Variável global para guardar os países
   let countries = [];
 
   if (containerCards) {
+    let isLoading = true;
+    const loadingMessage = document.querySelector(".loading");
+    loadingMessage.innerHTML = "Loading..."
     const showAllCountries = async () => {
       try {
         const [res1, res2, res3] = await Promise.all([
@@ -15,11 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
           fetch("https://restcountries.com/v3.1/region/europe"),
           fetch("https://restcountries.com/v3.1/region/asia"),
         ]);
-
         const america = await res1.json();
         const europe = await res2.json();
         const asia = await res3.json();
-
+        isLoading = false;
+        loadingMessage.innerHTML = isLoading ? "Loading..." : "Success!";
+        setTimeout(()=>{
+          loadingMessage.style.display = 'none'
+        },2000)
         const containerCardsAmerica =
           document.querySelector("#container-cards");
         const containerCardsEurope =
@@ -37,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-          <div className="img-card">
+          <div class="img-card">
             <img src=${flag} alt = 'flag of ${name}' class="card-img-top" >
           </div>
           <div class="card-body">
@@ -60,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-          <div className="img-card">
+          <div class="img-card">
             <img src=${flag} alt = 'flag of ${name}' class="card-img-top" >
           </div>
           <div class="card-body">
@@ -82,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-          <div className="img-card">
+          <div class="img-card">
             <img src=${flag} alt = 'flag of ${name}' class="card-img-top" >
           </div>
           <div class="card-body">
@@ -95,13 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
           containerCardsAsia.appendChild(card);
         });
 
-
         function redirectToDetailsCountry(country) {
           sessionStorage.setItem("countryData", JSON.stringify(country));
           window.location.href = "details.html";
         }
       } catch (error) {
-        console.log(`Erro ao consumir API: ${error}`);
+        isLoading = false;
+        loadingMessage.innerHTML = "Error loading data";
+        console.error(Error);
       }
     };
 
@@ -112,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Buscando o input e a table no html
     const searchInput = document.getElementById("input-search");
     const tableCountries = document.getElementById("table-countries");
-  
+
     const btnContinent = document.querySelectorAll(".continent");
 
     // Função de filtragem por continente
@@ -132,8 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             row.innerHTML = `
             <td>${country.name.common}</td>
-            <td>${country.capital}<td>
-            <td>${country.population}</td>
+            <td>${country.capital}</td>
+            <td class="d-none d-sm-table-cell">${country.population}</td>
             <td><img src="${country.flags.svg}" alt="Bandeira de ${country.name.common}" width="40"></td>
             `;
 
@@ -147,19 +154,20 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 2000);
         }
       });
-  
     });
 
-     // função para adicionar a classe active do bootstrap
-     document.getElementById("button-container").addEventListener("click", function(event) {
-  
-      if (event.target.tagName === "BUTTON") {
-          document.querySelectorAll("#button-container .btn-primary").forEach(btn => btn.classList.remove("active"));
+    // função para adicionar a classe active do bootstrap
+    document
+      .getElementById("button-container")
+      .addEventListener("click", function (event) {
+        if (event.target.tagName === "BUTTON") {
+          document
+            .querySelectorAll("#button-container .btn-primary")
+            .forEach((btn) => btn.classList.remove("active"));
           // Adiciona a classe 'active' ao botão clicado
           event.target.classList.add("active");
-
-      }
-  });
+        }
+      });
 
     function loadingCountries() {
       // outra maneira de fazer uma fetch
@@ -181,13 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         row.innerHTML = `
             <td>${country.name.common}</td>
-            <td>${country.capital}<td>
+            <td>${country.capital}</td>
             <td class="d-none d-sm-table-cell">${country.population}</td>
             <td><img src="${country.flags.svg}" alt="Bandeira de ${country.name.common}" width="40"></td>
             `;
         tableCountries.appendChild(row);
-
-
       });
     }
 
@@ -208,37 +214,40 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (countryDetails) {
     getCountryDetails();
   } else if (contactUs) {
-   
     (() => {
-      'use strict'
-    
+      "use strict";
+
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation')
-    
+      const forms = document.querySelectorAll(".needs-validation");
+
       // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-    
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })()
+      Array.from(forms).forEach((form) => {
+        form.addEventListener(
+          "submit",
+          (event) => {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+
+            form.classList.add("was-validated");
+          },
+          false
+        );
+      });
+    })();
   }
 
   function getCountryDetails() {
     const countryData = sessionStorage.getItem("countryData");
 
     const countryJson = JSON.parse(countryData);
-    const name = countryJson.name.common
+    const name = countryJson.name.common;
     const borders = countryJson.borders;
     const flag = countryJson.flags.svg;
-    console.log(countryJson)
-    const continent = countryJson.continents
-    const population = countryJson.population
+    console.log(countryJson);
+    const continent = countryJson.continents;
+    const population = countryJson.population;
 
     countryDetails.innerHTML = `
    

@@ -114,23 +114,7 @@ form{
 
 
 
-.btn-search{
-    padding:  6px;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--primary-color);
-    color: var(--primary-text-color);
-    transition: all .3s ease;
-}
-.btn-search:hover{
-    color: #fff;
-}
-
-
-.error{
-    color: var(--error-color);
-    display: none;
-}
+/* Mensagem de Erro */
 
 .warning {
     display: none;
@@ -140,6 +124,15 @@ form{
 
 /* Estilização dos cards*/
 
+.img-card{
+    width: 100%;
+    height: 100px;
+}
+.img-card img{
+    width: 100%;
+    height: 100%;
+
+}
 .card{
     width: 10rem;
     transition: all .3s ease;

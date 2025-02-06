@@ -36,10 +36,10 @@
                 <a class="nav-link active" aria-current="page" href="index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="list.html">Lista</a>
+                <a class="nav-link" href="list.html">List</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="contact.html">Contato</a>
+                <a class="nav-link" href="contact.html">Contact</a>
               </li>
             </ul>
           </div>
@@ -47,7 +47,7 @@
       </nav>
     </header>
     <main id="main-search-list" class="container d-flex justify-content-center align-items-center" >
-      <h1 class="title-h1 text-align-center">
+      <h1 class="display-4 display-md-3 display-sm-5 text-center">
         Search the country by name
       </h1>
       <div class="search-countries">
@@ -55,39 +55,40 @@
           <input type="text" id="input-search" class="form-control ">
         </form>
       </div>
-      
-        <div class="container">
-          <div id="button-container" class="row">
-            <div class="col-12 col-sm-2">
-              <button value="africa" type="button" class="btn btn-primary w-100 mb-1 rounded-1 continent" >Africa</button>
-            </div>
-            <div class="col-12 col-sm-2">
-              <button value="america" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent active">America</button>
-            </div>
-            <div class="col-12 col-sm-2">
-              <button value="antarctica" type="button" class="btn btn-primary w-100 mb-1 rounded-1 continent">antarctica</button>
-            </div>
-            <div class="col-12 col-sm-2">
-              <button value="asia" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Asia</button>
-            </div>
-            <div class="col-12 col-sm-2">
-              <button value="europe" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Europe</button>
-            </div>
-            <div class="col-12 col-sm-2">
-              <button value="oceania" type="button" class="btn btn-primary w-100 mb-1 rounded-1  continent">Oceania</button>
-            </div>
+      <div class="container text-center">
+        <div id="button-container" class="row">
+          <div class="col-12 col-sm-2">
+            <button value="africa" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hidden continent" style="white-space: nowrap;" >Africa</button>
+          </div>
+          <div class="col-12 col-sm-2">
+            <button value="america" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hidden continent"  style="white-space: nowrap;">America</button>
+          </div>
+          <div class="col-12 col-sm-2">
+            <button value="antarctica" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hiddencontinent"> antarctica</button>
+          </div>
+          <div class="col-12 col-sm-2">
+            <button value="asia" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hidden continent" style="white-space: nowrap;" >Asia</button>
+          </div>
+          <div class="col-12 col-sm-2">
+            <button value="europe" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hidden continent" style="white-space: nowrap;" >Europe</button>
+          </div>
+          <div class="col-12 col-sm-2">
+            <button value="oceania" type="button" class="btn btn-primary w-100 mb-1 rounded-1 text-truncate  overflow-hidden continent" style="white-space: nowrap;" >Oceania</button>
           </div>
         </div>
+      </div>
       
      
         <p class="warning">I'm sorry, region not found!</p>
 
     </main>
+          
+   
     <table id="list" class="table table-hover table-responsive">
       <thead>
         <tr>
           <th scope="col">Name</th>
-          <th scope="col" colspan="2">Capital</th>
+          <th scope="col" rowspan="2">Capital</th>
           <th scope="col" class="d-none d-sm-table-cell">Population</th>
           <th scope="col">Flag</th>
         </tr>
@@ -96,9 +97,10 @@
     </table>
     <!-- footer -->
     <footer class="footer">
-      <p>Todos os direitos reservados &copy;</p>
+      <p>
+        All rights reserved &copy;</p>
       <div class="emails">
-        E-mails: exemplo@outlook.com | exemplo2@gmail.com
+        Emails: example@outlook.com | example@gmail.com
       </div>
     </footer>
     <script
