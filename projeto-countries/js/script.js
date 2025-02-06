@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>${country.name.common}</td>
             <td>${country.capital}</td>
             <td class="d-none d-sm-table-cell">${country.population}</td>
-            <td><img src="${country.flags.svg}" alt="Bandeira de ${country.name.common}" width="40"></td>
+            <td><img src="${country.flags.svg}" alt="Flag of ${country.name.common}" width="40"></td>
             `;
 
             tableCountries.appendChild(row);
