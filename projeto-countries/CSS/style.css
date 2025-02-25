@@ -9,6 +9,7 @@
   --alert-color: #ffc107;
   --error-color: #dc3545;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -109,11 +110,6 @@ body {
   justify-content: center;
 }
 
-
-form {
-  width: 100%;
-  margin: 10px;
-}
 
 
 .valid-feedback {

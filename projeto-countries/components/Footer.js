@@ -10,7 +10,7 @@ class Footer extends HTMLElement {
         <p class="text-white">Discover curiosities and information about countries around the world.</p>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-4">
         <h5 class="text-white">Useful Links</h5>
         <ul class="list-unstyled">
           <li><a href="index.html" class="text-white">Home</a></li>

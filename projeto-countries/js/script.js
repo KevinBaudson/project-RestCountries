@@ -15,6 +15,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const contactUs = document.querySelector("#contact-us");
 
   if (containerCards) {
+
+    const showCardsInitial = async () => {
+      const countriesAll = await fetchCountriesAll()
+        countriesAll.sort((a, b) => {
+          return a.name.common.localeCompare(b.name.common)
+        }).forEach(country => {
+          const card = new Card(country);
+          containerCards.appendChild(card.render());
+        })
+    }
+
+showCardsInitial()
+
     const dropdownItems = document.querySelectorAll(".dropdown-item");
 
     dropdownItems.forEach((item) => {
