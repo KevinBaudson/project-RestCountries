@@ -25,11 +25,20 @@ export class Card {
     btnSeeMore.classList.add("btn", "text-light");
     btnSeeMore.innerHTML = "See details...";
 
-    const redirectToDetails = () => {
-      sessionStorage.setItem("countryData", JSON.stringify(this.country));
-      window.location.href = "details.html";
-    };
+    // Formatação de languages e currencies antes de salvar no sessionStorage
+    const formattedLanguages = this.country.languages ? Object.values(this.country.languages).join(", ") : "N/A";
+    const formattedCurrencies = this.country.currencies ? Object.values(this.country.currencies).map(c => c.name).join(", ") : "N/A";
 
+    const redirectToDetails = () => {
+      sessionStorage.setItem("countryData", JSON.stringify({
+        ...this.country,
+        name: this.country.name?.common || "Name is not defined",
+        flag: this.flag,
+        languages: formattedLanguages,
+        currencies: formattedCurrencies
+      }));
+      window.location.href = "pages/details.html";
+    };
 
     card.addEventListener("click", redirectToDetails);
 

@@ -3,32 +3,35 @@ export class Details {
     this.container = document.getElementById(containerId);
   }
 
-  render() {
-    const countryData = sessionStorage.getItem("countryData");
+  async render() {
+    let countryData = sessionStorage.getItem("countryData");
 
-   
-    const countryJson = JSON.parse(countryData);
-    
+    if (!countryData) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const countryName = urlParams.get("country");
 
-    const name = countryJson.name.common;
-    const flag = countryJson.flags.svg;
-    const continent = countryJson.continents?.join(", ") || "N/A";
-    const population = countryJson.population.toLocaleString("pt-BR");
-    const borders = countryJson.borders?.join(", ") || "None";
+      if (countryName) {
+        const allCountries = await fetchCountriesAll();
+        countryData = allCountries.find(c => c.name.common === countryName);
+      }
+    } else {
+      countryData = JSON.parse(countryData);
+      console.log(countryData);
+      console.log(countryData.flag);
+    }
 
-    const languages = countryJson.languages ? Object.values(countryJson.languages).join(", ") : "N/A";
-    const currencyKey = countryJson.currencies ? Object.keys(countryJson.currencies)[0] : null;
-    const currency = currencyKey ? `${countryJson.currencies[currencyKey].name} (${countryJson.currencies[currencyKey].symbol})` : "N/A";
+    if (!countryData) {
+      this.container.innerHTML = "<p>Error: No country data found.</p>";
+      return;
+    }
 
-    const capital = countryJson.capital ? countryJson.capital[0] : "N/A";
-    const googleMaps = countryJson.maps?.googleMaps || "#";
-
-
+    const { name, flags, region, population, borders, languages, currencies, capital, maps } = countryData;
+    const flag = countryData.flag;
     this.container.innerHTML = `
-      <h2 class="fw-bold">${name}</h2>
+      <h2 class="fw-bold">${name.common || name}</h2>
       <div class="content-details d-flex flex-column flex-md-row gap-3">
         <div class="img-details">
-          <img src="${flag}" alt="Flag of ${name}" class="img-fluid shadow-lg rounded">
+          <img src="${flags?.svg || flag}" alt="Flag of ${name.common}" class="img-fluid shadow-lg rounded">
         </div>
         <div class="table-details">
           <table class="table table-striped table-hover">
@@ -41,9 +44,9 @@ export class Details {
             </thead>
             <tbody>
               <tr>
-                <td>${continent}</td>
-                <td>${population}</td>
-                <td>${borders}</td>
+                <td>${region || "N/A"}</td>
+                <td>${parseInt(population).toLocaleString() || "N/A"}</td>
+                <td>${borders || "None"}</td>
               </tr>
             </tbody>
           </table>
@@ -58,10 +61,10 @@ export class Details {
             </thead>
             <tbody>
               <tr>
-                <td>${capital}</td>
-                <td>${languages}</td>
-                <td>${currency}</td>
-                <td><a href="${googleMaps}" target="_blank">View on Maps</a></td>
+                <td>${capital || "N/A"}</td>
+                <td>${languages || "N/A"}</td>
+                <td>${currencies || "N/A"}</td>
+                <td><a href="${maps || "#"}" target="_blank">View on Maps</a></td>
               </tr>
             </tbody>
           </table>
