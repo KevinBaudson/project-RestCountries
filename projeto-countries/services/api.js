@@ -44,7 +44,7 @@ export async function getLanguagesAndCurrencies(countries) {
   let counterCurrency = {};
 
   resultCountries.forEach((country) => {
-    // Coletando idiomas
+
     if (country.languages) {
       Object.values(country.languages).forEach((language) => {
         counterLanguage[language] = (counterLanguage[language] || 0) + 1;
@@ -54,7 +54,7 @@ export async function getLanguagesAndCurrencies(countries) {
     if (country.currencies) {
       Object.values(country.currencies).forEach((currency) => {
         if (currency && currency.name) {
-          // Garante que a moeda tem um nome válido
+     
           counterCurrency[currency.name] =
             (counterCurrency[currency.name] || 0) + 1;
         }

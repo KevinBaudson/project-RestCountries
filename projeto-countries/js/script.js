@@ -10,6 +10,15 @@ import { Table } from "../components/TableList.js";
 import { Top10MostPopulous } from "../components/Top10MostPopulous.js"
 import { Top10BiggestCountries } from "../components/Top10BiggestCountries.js";
 
+function showLoading() {
+  document.getElementById("loading").classList.remove("d-none");
+}
+
+function hideLoading() {
+  document.getElementById("loading").classList.add("d-none");
+}
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   const containerCards = document.querySelector("#container-cards");
   const mainSearchList = document.querySelector("#main-search-list");
@@ -27,11 +36,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const BiggestCountries = new Top10BiggestCountries("#biggest-countries");
 
     const fetchCountriesData = async () => {
+      showLoading();
+     try {
       const countries = await fetchCountriesAll();
       allCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
       renderPage();
       mostPopulousList.render(countries);
       BiggestCountries.render(countries);
+     } catch (error) {
+      console.error(error);
+     }finally{
+      hideLoading()
+     }
     };
 
     const renderPage = () => {
@@ -108,8 +124,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     let filteredCountries = [...allCountries];
 
     function renderTable() {
+      showLoading()
+     try {
       const table = new Table(filteredCountries);
       table.render(tableContainer);
+     } catch (error) {
+      console.error(error);
+     }finally{
+      hideLoading()
+     }
     }
 
     searchInput.addEventListener("input", (event) => {
