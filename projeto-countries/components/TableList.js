@@ -1,7 +1,15 @@
 export class Table {
   constructor(countries) {
     this.countries = countries;
-    console.log(countries);
+    this.itemsPerPage = 10; 
+    this.currentPage = 1; 
+    this.totalPages = Math.ceil(this.countries.length / this.itemsPerPage);
+  }
+
+  getCountriesForCurrentPage() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.countries.slice(start, end);
   }
 
   createTable() {
@@ -21,39 +29,23 @@ export class Table {
         </tr>
       </thead>
       <tbody>
-        ${this.countries
+        ${this.getCountriesForCurrentPage()
           .map(
             (country) => `
-          <tr class="clickable-row" data-country-name="${
-            country.name.common
-          }" data-country-id="${country.cca3}" data-country-pop="${
-              country.population
-            }" data-country-region="${country.region}" data-country-flag="${
-              country.flags.svg
-            }" data-country-capital="${
-              country.capital ? country.capital[0] : "N/A"
-            }" data-country-languages="${
-              country.languages
-                ? Object.values(country.languages).join(", ")
-                : "N/A"
-            }" data-country-currencies="${
-              country.currencies
-                ? Object.values(country.currencies)
-                    .map((c) => c.name)
-                    .join(", ")
-                : "N/A"
-            }" data-country-borders="${
-              country.borders ? country.borders.join(", ") : "None"
-            }" data-country-maps="${
-              country.maps ? country.maps.googleMaps : "#"
-            }">
+          <tr class="clickable-row" data-country-name="${country.name.common}"
+              data-country-id="${country.cca3}" data-country-pop="${country.population}"
+              data-country-region="${country.region}" data-country-flag="${country.flags.svg}"
+              data-country-capital="${country.capital ? country.capital[0] : "N/A"}"
+              data-country-languages="${country.languages ? Object.values(country.languages).join(", ") : "N/A"}"
+              data-country-currencies="${country.currencies ? Object.values(country.currencies).map(c => c.name).join(", ") : "N/A"}"
+              data-country-borders="${country.borders ? country.borders.join(", ") : "None"}"
+              data-country-maps="${country.maps ? country.maps.googleMaps : "#"}">
             <td>${country.name.common}</td>
             <td>${country.population.toLocaleString()}</td>
             <td>${country.region}</td>
             <td>
-              <img src="${country.flags.svg}" alt="Flag of ${
-              country.name.common
-            }" class="img-fluid" style="width: 40px; height: 40px; object-fit: cover;">
+              <img src="${country.flags.svg}" alt="Flag of ${country.name.common}"
+                class="img-fluid" style="width: 40px; height: 40px; object-fit: cover;">
             </td>
           </tr>
         `
@@ -63,61 +55,23 @@ export class Table {
 
     tableContainer.appendChild(table);
 
-    // Adicionando cursor-pointer e comportamento de clique nas linhas
     table.querySelectorAll(".clickable-row").forEach((row) => {
-      row.classList.add("cursor-pointer"); 
-
+      row.classList.add("cursor-pointer");
       row.addEventListener("click", (e) => {
-        const countryName = e.currentTarget.getAttribute("data-country-name");
-        const countryId = e.currentTarget.getAttribute("data-country-id");
-        const countryPop = e.currentTarget.getAttribute("data-country-pop");
-        const countryRegion = e.currentTarget.getAttribute(
-          "data-country-region"
-        );
-        const countryFlag = e.currentTarget.getAttribute("data-country-flag");
-        const countryCapital = e.currentTarget.getAttribute(
-          "data-country-capital"
-        );
-        const countryLanguages = e.currentTarget.getAttribute(
-          "data-country-languages"
-        );
-        const countryCurrencies = e.currentTarget.getAttribute(
-          "data-country-currencies"
-        );
-        const countryBorders = e.currentTarget.getAttribute(
-          "data-country-borders"
-        );
-        const countryMaps = e.currentTarget.getAttribute("data-country-maps");
+        const countryData = {
+          name: e.currentTarget.getAttribute("data-country-name"),
+          id: e.currentTarget.getAttribute("data-country-id"),
+          population: e.currentTarget.getAttribute("data-country-pop"),
+          region: e.currentTarget.getAttribute("data-country-region"),
+          flag: e.currentTarget.getAttribute("data-country-flag"),
+          capital: e.currentTarget.getAttribute("data-country-capital"),
+          languages: e.currentTarget.getAttribute("data-country-languages"),
+          currencies: e.currentTarget.getAttribute("data-country-currencies"),
+          borders: e.currentTarget.getAttribute("data-country-borders"),
+          maps: e.currentTarget.getAttribute("data-country-maps"),
+        };
 
-        sessionStorage.setItem(
-          "countryData",
-          JSON.stringify({
-            name: countryName,
-            id: countryId,
-            population: countryPop,
-            region: countryRegion,
-            flag: countryFlag,
-            capital: countryCapital,
-            languages: countryLanguages,
-            currencies: countryCurrencies,
-            borders: countryBorders,
-            maps: countryMaps,
-          })
-        );
-
-        console.log("Dados armazenados no sessionStorage:", {
-          name: countryName,
-          id: countryId,
-          population: countryPop,
-          region: countryRegion,
-          flag: countryFlag,
-          capital: countryCapital,
-          languages: countryLanguages,
-          currencies: countryCurrencies,
-          borders: countryBorders,
-          maps: countryMaps,
-        });
-
+        sessionStorage.setItem("countryData", JSON.stringify(countryData));
         window.location.href = "details.html";
       });
     });
@@ -125,8 +79,47 @@ export class Table {
     return tableContainer;
   }
 
+  createPagination() {
+    const paginationContainer = document.createElement("div");
+    paginationContainer.className = "pagination-container text-center mt-3";
+
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.className = "btn btn-primary mx-1";
+    prevButton.disabled = this.currentPage === 1;
+    prevButton.addEventListener("click", () => {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.render(this.container);
+      }
+    });
+
+    const pageIndicator = document.createElement("span");
+    pageIndicator.textContent = `Page ${this.currentPage} of ${this.totalPages}`;
+    pageIndicator.className = "mx-2";
+
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.className = "btn btn-primary mx-1";
+    nextButton.disabled = this.currentPage === this.totalPages;
+    nextButton.addEventListener("click", () => {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.render(this.container);
+      }
+    });
+
+    paginationContainer.appendChild(prevButton);
+    paginationContainer.appendChild(pageIndicator);
+    paginationContainer.appendChild(nextButton);
+
+    return paginationContainer;
+  }
+
   render(container) {
+    this.container = container;
     container.innerHTML = "";
     container.appendChild(this.createTable());
+    container.appendChild(this.createPagination());
   }
 }

@@ -7,8 +7,8 @@ import {
 import { Card } from "../components/Card.js";
 import { Details } from "../components/Details.js";
 import { Table } from "../components/TableList.js";
-import { MostPopulousList } from "../components/MostPopulousList.js";
-import { BiggestCountries } from "../components/BiggestCountries.js";
+import { Top10MostPopulous } from "../components/Top10MostPopulous.js"
+import { Top10BiggestCountries } from "../components/Top10BiggestCountries.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const containerCards = document.querySelector("#container-cards");
@@ -23,15 +23,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     sessionStorage.removeItem("countryData");
 
-    const mostPopulousList = new MostPopulousList('#most-populous-list');
-    const biggestCountries = new BiggestCountries("#biggest-countries");
+    const mostPopulousList = new Top10MostPopulous('#most-populous-list');
+    const BiggestCountries = new Top10BiggestCountries("#biggest-countries");
 
     const fetchCountriesData = async () => {
       const countries = await fetchCountriesAll();
       allCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
       renderPage();
       mostPopulousList.render(countries);
-      biggestCountries.render(countries);
+      BiggestCountries.render(countries);
     };
 
     const renderPage = () => {

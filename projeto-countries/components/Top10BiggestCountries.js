@@ -1,4 +1,4 @@
-export class BiggestCountries {
+export class Top10BiggestCountries {
   constructor(containerId) {
     this.container = document.querySelector(containerId);
   }
@@ -14,7 +14,6 @@ export class BiggestCountries {
     this.container.innerHTML = "";
 
     sortedByArea.forEach((country, index) => {
-      // Formatação de languages e currencies
       const formattedLanguages = country.languages ? Object.values(country.languages).join(", ") : "N/A";
       const formattedCurrencies = country.currencies ? Object.values(country.currencies).map(c => c.name).join(", ") : "N/A";
 
@@ -45,7 +44,7 @@ export class BiggestCountries {
       });
 
       const areaSpan = document.createElement("span");
-      areaSpan.textContent = ` - Area: ${country.area.toLocaleString()} km²`;
+      areaSpan.textContent = `- Area: ${country.area.toLocaleString()} km²`;
 
       listItem.appendChild(document.createTextNode(`${index + 1 < 10 ? '0' : ''}${index + 1}. `));
       listItem.appendChild(flagImg);

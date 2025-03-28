@@ -180,7 +180,7 @@ body {
 }
 .container-list h2 {
   margin-bottom: 25px;
-  text-align: center; 
+  text-align: center;
 }
 
 .container-list a {
@@ -194,6 +194,8 @@ body {
 .cursor-pointer{
   cursor: pointer;
 }
+
+
 .header, 
 .footer {
   background-color: var(--background-header-footer) !important;

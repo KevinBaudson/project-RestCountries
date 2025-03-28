@@ -23,9 +23,10 @@ class Footer extends HTMLElement {
 
           <div class="col-md-4">
             <h5 class="text-white">Get News</h5>
-            <form>
+            <form id="newsletterForm" class="needs-validation" novalidate>
               <div class="mb-2">
-                <input type="email" class="form-control" placeholder="Your email">
+                <input type="email" id="emailInput" class="form-control" placeholder="Your email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
               </div>
               <button type="submit" class="btn btn-primary">Subscribe</button>
             </form>
@@ -37,6 +38,25 @@ class Footer extends HTMLElement {
         </div>
       </div>
     </footer>`;
+
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    const form = this.querySelector("#newsletterForm");
+    const emailInput = this.querySelector("#emailInput");
+
+    form.addEventListener("submit", function (event) {
+      if (!emailInput.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+        emailInput.classList.add("is-invalid");
+      } else {
+        emailInput.classList.remove("is-invalid");
+      }
+
+      form.classList.add("was-validated");
+    });
   }
 }
 

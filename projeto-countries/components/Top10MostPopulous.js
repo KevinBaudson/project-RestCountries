@@ -1,4 +1,4 @@
-export class MostPopulousList {
+export class Top10MostPopulous{
   constructor(containerId) {
     this.container = document.querySelector(containerId);
   }
@@ -14,7 +14,7 @@ export class MostPopulousList {
     this.container.innerHTML = "";
 
     sortedByPopulation.forEach((country, index) => {
-      // Formatação de languages e currencies
+
       const formattedLanguages = country.languages ? Object.values(country.languages).join(", ") : "N/A";
       const formattedCurrencies = country.currencies ? Object.values(country.currencies).map(c => c.name).join(", ") : "N/A";
 
