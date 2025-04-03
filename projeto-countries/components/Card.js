@@ -1,8 +1,18 @@
 export class Card {
   constructor(country) {
     this.country = country;
-    this.flag = country.flags?.svg || "placeholder.png";
-    this.name = country.name?.common || "Name is not defined";
+    this.flag = country.flags?.png || country.flag;
+    this.name = country.name?.common || country.name;
+    this.languages = country.languages
+    this.currencies = country.currencies
+    this.borders = country.borders ? country.borders : []; 
+    this.capital = (country.capital && typeof country.capital === 'string') 
+  ? country.capital 
+  : (Array.isArray(country.capital) && country.capital.length > 0) 
+    ? country.capital[0] 
+    : "No capital";
+    this.maps = country.maps.googleMaps
+
   }
 
   render() {
@@ -25,18 +35,21 @@ export class Card {
     btnSeeMore.classList.add("btn", "text-light");
     btnSeeMore.innerHTML = "See details...";
 
-    // Formatação de languages e currencies antes de salvar no sessionStorage
-    const formattedLanguages = this.country.languages ? Object.values(this.country.languages).join(", ") : "N/A";
-    const formattedCurrencies = this.country.currencies ? Object.values(this.country.currencies).map(c => c.name).join(", ") : "N/A";
-
     const redirectToDetails = () => {
-      sessionStorage.setItem("countryData", JSON.stringify({
-        ...this.country,
-        name: this.country.name?.common || "Name is not defined",
-        flag: this.flag,
-        languages: formattedLanguages,
-        currencies: formattedCurrencies
-      }));
+      sessionStorage.setItem(
+        "countryData",
+        JSON.stringify({
+          name: this.name,
+          flag: this.flag,
+          languages: this.languages,
+          currencies: this.currencies,
+          borders: this.borders.length > 0 ? this.borders.join(", ") : "None",
+          capital: Array.isArray(this.capital) ? this.capital.join(", ") : this.capital,
+          maps: this.maps,
+          region: this.country.region || "Unknown",
+          population: this.country.population || 0
+        })
+      );
       window.location.href = "pages/details.html";
     };
 
@@ -48,10 +61,8 @@ export class Card {
     });
 
     cardBody.appendChild(titleCard);
-
     card.appendChild(imgCard);
     card.appendChild(cardBody);
-    
     card.appendChild(btnSeeMore);
 
     return card;

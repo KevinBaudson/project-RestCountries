@@ -86,19 +86,6 @@ body {
   background-color: #007bff;
 }
 
-
-.div-details-region {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.show-details-region h2 {
-  margin: 10px;
-}
-
-
 .dropdown-item{
   cursor: pointer;
 }

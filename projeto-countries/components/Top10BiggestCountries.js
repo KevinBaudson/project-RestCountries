@@ -12,16 +12,21 @@ export class Top10BiggestCountries {
       .slice(0, 10);
 
     this.container.innerHTML = "";
-
+    
     sortedByArea.forEach((country, index) => {
-      const formattedLanguages = country.languages ? Object.values(country.languages).join(", ") : "N/A";
-      const formattedCurrencies = country.currencies ? Object.values(country.currencies).map(c => c.name).join(", ") : "N/A";
+      const formattedLanguages = typeof country.languages === "object"
+      ? Object.values(country.languages).join(", ") 
+      : country.languages || "N/A";
+    
+    const formattedCurrencies = typeof country.currencies === "object"
+      ? Object.values(country.currencies).map(c => c.name).join(", ") 
+      : country.currencies || "N/A";
 
       const listItem = document.createElement("li");
       listItem.className = "list-group-item d-flex align-items-center";
 
       const flagImg = document.createElement("img");
-      flagImg.src = country.flags?.svg || "";
+      flagImg.src = country.flag
       flagImg.alt = `Flag of ${country.name.common}`;
       flagImg.style.width = "40px";
       flagImg.style.height = "40px";
@@ -44,7 +49,7 @@ export class Top10BiggestCountries {
       });
 
       const areaSpan = document.createElement("span");
-      areaSpan.textContent = `- Area: ${country.area.toLocaleString()} km²`;
+      areaSpan.textContent = ` - Area: ${country.area.toLocaleString()} km²`;
 
       listItem.appendChild(document.createTextNode(`${index + 1 < 10 ? '0' : ''}${index + 1}. `));
       listItem.appendChild(flagImg);

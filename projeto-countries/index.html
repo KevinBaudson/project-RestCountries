@@ -12,16 +12,13 @@
     <link rel="stylesheet" href="./CSS/style.css" />
     <script src="./components/Header.js"></script>
     <script src="./components/footer.js"></script>
-    <script type="module" src="./js/script.js" defer></script>
+    <script type="module" src="./js/script.js"></script>
+
     <title>Countries</title>
   </head>
   <body>
     <header-component></header-component>
    
-    <div class="container mt-4">
-      <div id="carousel-container" ></div>
-    </div>
-
     <div class="banner">  
     </div>
     <main class="container-home">
@@ -32,10 +29,13 @@
         <a class="btn btn-secondary dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Choose a region
         </a>
-        <div class="div-details-region"></div>
+
+        <div id="continent-details" class="div-details-region"></div>
+        
         <div class="dropdown-menu">
+          <a class="dropdown-item" data-region="All">All</a>
           <a class="dropdown-item" data-region="Africa">Africa</a>
-          <a class="dropdown-item" data-region="America">America</a>
+          <a class="dropdown-item" data-region="Americas">America</a>
           <a class="dropdown-item" data-region="Asia">Asia</a>
           <a class="dropdown-item" data-region="Europe">Europe</a>
           <a class="dropdown-item" data-region="Oceania">Oceania</a>

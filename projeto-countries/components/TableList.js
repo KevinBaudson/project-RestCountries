@@ -1,15 +1,18 @@
 export class Table {
   constructor(countries) {
-    this.countries = countries;
+    this.countries = countries.sort((a, b) =>
+      a.name.common.localeCompare(b.name.common)
+    );
     this.itemsPerPage = 10; 
     this.currentPage = 1; 
     this.totalPages = Math.ceil(this.countries.length / this.itemsPerPage);
   }
 
   getCountriesForCurrentPage() {
+    const countriesToShow = this.filteredCountries || this.countries; 
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
-    return this.countries.slice(start, end);
+    return countriesToShow.slice(start, end);
   }
 
   createTable() {
@@ -59,7 +62,7 @@ export class Table {
       row.classList.add("cursor-pointer");
       row.addEventListener("click", (e) => {
         const countryData = {
-          name: e.currentTarget.getAttribute("data-country-name"),
+          name: { common: e.currentTarget.getAttribute("data-country-name") },
           id: e.currentTarget.getAttribute("data-country-id"),
           population: e.currentTarget.getAttribute("data-country-pop"),
           region: e.currentTarget.getAttribute("data-country-region"),
@@ -78,6 +81,18 @@ export class Table {
 
     return tableContainer;
   }
+
+  filterCountries(searchTerm) {
+    const filteredCountries = this.countries.filter((country) =>
+      country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    this.totalPages = Math.ceil(filteredCountries.length / this.itemsPerPage);
+    this.currentPage = 1; 
+    this.filteredCountries = filteredCountries; 
+  
+    this.render(this.container);
+  }  
 
   createPagination() {
     const paginationContainer = document.createElement("div");

@@ -1,6 +1,5 @@
 class Header extends HTMLElement {
   connectedCallback() {
-    // Detecta se a página está dentro da pasta 'pages'
     const pathPrefix = window.location.pathname.includes("/pages/") ? "../" : "";
 
     this.innerHTML = `

@@ -1,152 +1,72 @@
-import {
-  fetchCountriesAll,
-  fetchCountriesByRegion,
-  showDetailsByContinent,
-} from "../services/api.js";
-
-import { Card } from "../components/Card.js";
+import CountryController from "../controllers/CountryController.js";
+import API from "../services/api.js";
 import { Details } from "../components/Details.js";
+import { ContinentDetails } from "../components/ContinentDetails.js";
 import { Table } from "../components/TableList.js";
-import { Top10MostPopulous } from "../components/Top10MostPopulous.js"
-import { Top10BiggestCountries } from "../components/Top10BiggestCountries.js";
+const containerCards = document.querySelector("#container-cards");
+const containerDetails = document.querySelector("#container-details");
+const tableContainer = document.querySelector("#table-container");
+const contactUs = document.querySelector("#contact-us");
+const loadingSpinner = document.querySelector("#loading"); 
 
-function showLoading() {
-  document.getElementById("loading").classList.remove("d-none");
-}
-
-function hideLoading() {
-  document.getElementById("loading").classList.add("d-none");
-}
-
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+const detailsContainer = document.querySelector(".div-details-region");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const containerCards = document.querySelector("#container-cards");
-  const mainSearchList = document.querySelector("#main-search-list");
-  const containerDetails = document.querySelector("#container-details");
-  const contactUs = document.querySelector("#contact-us");
-
   if (containerCards) {
-    let currentPage = 1;
-    const countriesPerPage = 12;
-    let allCountries = [];
+    const controller = new CountryController();
+    
+    loadingSpinner.classList.remove("d-none");
 
-    sessionStorage.removeItem("countryData");
-
-    const mostPopulousList = new Top10MostPopulous('#most-populous-list');
-    const BiggestCountries = new Top10BiggestCountries("#biggest-countries");
-
-    const fetchCountriesData = async () => {
-      showLoading();
-     try {
-      const countries = await fetchCountriesAll();
-      allCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
-      renderPage();
-      mostPopulousList.render(countries);
-      BiggestCountries.render(countries);
-     } catch (error) {
-      console.error(error);
-     }finally{
-      hideLoading()
-     }
-    };
-
-    const renderPage = () => {
-      const startIndex = (currentPage - 1) * countriesPerPage;
-      const endIndex = startIndex + countriesPerPage;
-      const countriesToDisplay = allCountries.slice(startIndex, endIndex);
-
-      containerCards.innerHTML = "";
-
-      countriesToDisplay.forEach((country) => {
-        const card = new Card(country);
-        containerCards.appendChild(card.render());
-      });
-
-      updatePagination();
-    };
-
-    const updatePagination = () => {
-      const totalPages = Math.ceil(allCountries.length / countriesPerPage);
-
-      const prevPageButton = document.querySelector("#prev-page");
-      const nextPageButton = document.querySelector("#next-page");
-      const pageInfo = document.querySelector("#page-info");
-
-      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-      
-      prevPageButton.disabled = currentPage === 1;
-      nextPageButton.disabled = currentPage === totalPages;
-    };
-
-    const prevPageButton = document.querySelector("#prev-page");
-    const nextPageButton = document.querySelector("#next-page");
-
-    prevPageButton.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderPage();
-      }
-    });
-
-    nextPageButton.addEventListener("click", () => {
-      const totalPages = Math.ceil(allCountries.length / countriesPerPage);
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderPage();
-      }
-    });
-
-    await fetchCountriesData();
-
-    const dropdownItems = document.querySelectorAll(".dropdown-item");
+    try {
+      await controller.initHome();
+    } finally {
+ 
+      loadingSpinner.classList.add("d-none");
+    }
 
     dropdownItems.forEach((item) => {
-      item.addEventListener("click", async () => {
-        const region = item.dataset.region;
+      item.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const region = item.getAttribute("data-region");
 
-        if (region) {
-          const countries = await fetchCountriesByRegion(region);
-          showDetailsByContinent(region);
+        if (region !== "All") {
+          detailsContainer.innerHTML = "";
+          detailsContainer.style.display = "block";
 
-          allCountries = countries;
-          currentPage = 1;
-          renderPage();
+          const detailsComponent = new ContinentDetails(region);
+          await detailsComponent.render();
+        } else {
+          detailsContainer.style.display = "none";
         }
       });
     });
-  } else if (mainSearchList) {
-    const tableContainer = document.getElementById("table-container");
-    const searchInput = document.getElementById("search");
-
-    let allCountries = await fetchCountriesAll();
-    allCountries.sort((a, b) => a.name.common.localeCompare(b.name.common));
-
-    let filteredCountries = [...allCountries];
-
-    function renderTable() {
-      showLoading()
-     try {
-      const table = new Table(filteredCountries);
-      table.render(tableContainer);
-     } catch (error) {
-      console.error(error);
-     }finally{
-      hideLoading()
-     }
-    }
-
-    searchInput.addEventListener("input", (event) => {
-      const searchTerm = event.target.value.toLowerCase();
-      filteredCountries = allCountries.filter((country) =>
-        country.name.common.toLowerCase().includes(searchTerm)
-      );
-      renderTable();
-    });
-
-    renderTable();
   } else if (containerDetails) {
-    const details = new Details("container-details");
-    details.render();
+    const detailsInstance = new Details("container-details");
+    detailsInstance.render();
+  } else if (tableContainer) {
+    try {
+      loadingSpinner.classList.remove("d-none");
+
+      const countries = await API.fetchCountriesAll();
+      const tableList = new Table(countries);
+      tableList.render(tableContainer);
+
+      const searchInput = document.querySelector("#search-input");
+
+      if (searchInput) {
+        searchInput.addEventListener("input", (event) => {
+          const searchTerm = event.target.value.trim();
+          tableList.filterCountries(searchTerm);
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      tableContainer.innerHTML = '<p>Error when searching for countries</p>';
+    } finally {
+
+      loadingSpinner.classList.add("d-none");
+    }
   } else if (contactUs) {
     (() => {
       "use strict";

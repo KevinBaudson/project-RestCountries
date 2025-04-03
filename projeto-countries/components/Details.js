@@ -12,12 +12,10 @@ export class Details {
 
       if (countryName) {
         const allCountries = await fetchCountriesAll();
-        countryData = allCountries.find(c => c.name.common === countryName);
+        countryData = allCountries.find((c) => c.name.common === countryName);
       }
     } else {
       countryData = JSON.parse(countryData);
-      console.log(countryData);
-      console.log(countryData.flag);
     }
 
     if (!countryData) {
@@ -25,13 +23,53 @@ export class Details {
       return;
     }
 
-    const { name, flags, region, population, borders, languages, currencies, capital, maps } = countryData;
-    const flag = countryData.flag;
+    const name = countryData.name?.common || countryData.name || "N/A";
+    const flag =
+      countryData.flag || countryData.flags?.svg || "placeholder.png";
+    const region = countryData.region || "N/A";
+    const population = countryData.population
+      ? parseInt(countryData.population).toLocaleString()
+      : "N/A";
+    const borders =
+      typeof countryData.borders === "string"
+        ? countryData.borders.split(", ").join(", ")
+        : Array.isArray(countryData.borders)
+        ? countryData.borders.join(", ")
+        : "None";
+
+    const capital =
+      countryData.capital && typeof countryData.capital === "string"
+        ? countryData.capital
+        : Array.isArray(countryData.capital)
+        ? countryData.capital.join(", ")
+        : "N/A";
+
+    const languages =
+      countryData.languages && typeof countryData.languages === "string"
+        ? countryData.languages
+        : countryData.languages
+        ? Object.values(countryData.languages).join(", ")
+        : "N/A";
+
+    const currencies =
+      countryData.currencies && typeof countryData.currencies === "string"
+        ? countryData.currencies
+        : countryData.currencies
+        ? Object.values(countryData.currencies)
+            .map((c) => c.name)
+            .join(", ")
+        : "N/A";
+
+    const maps =
+      typeof countryData.maps === "string"
+        ? countryData.maps
+        : countryData.maps?.googleMaps || "#";
+
     this.container.innerHTML = `
-      <h2 class="fw-bold">${name.common || name}</h2>
+      <h2 class="fw-bold">${name}</h2>
       <div class="content-details d-flex flex-column flex-md-row gap-3">
         <div class="img-details">
-          <img src="${flags?.svg || flag}" alt="Flag of ${name.common}" class="img-fluid shadow-lg rounded">
+          <img src="${flag}" alt="Flag of ${name}" class="img-fluid shadow-lg rounded">
         </div>
         <div class="table-details">
           <table class="table table-striped table-hover">
@@ -44,9 +82,9 @@ export class Details {
             </thead>
             <tbody>
               <tr>
-                <td>${region || "N/A"}</td>
-                <td>${parseInt(population).toLocaleString() || "N/A"}</td>
-                <td>${borders || "None"}</td>
+                <td>${region}</td>
+                <td>${population}</td>
+                <td>${borders}</td>
               </tr>
             </tbody>
           </table>
@@ -61,10 +99,10 @@ export class Details {
             </thead>
             <tbody>
               <tr>
-                <td>${capital || "N/A"}</td>
-                <td>${languages || "N/A"}</td>
-                <td>${currencies || "N/A"}</td>
-                <td><a href="${maps || "#"}" target="_blank">View on Maps</a></td>
+                <td>${capital}</td>
+                <td>${languages}</td>
+                <td>${currencies}</td>
+                <td><a href="${maps}" target="_blank">View on Maps</a></td>
               </tr>
             </tbody>
           </table>
